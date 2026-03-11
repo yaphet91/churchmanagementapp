@@ -1,0 +1,1 @@
+const s="/build/assets/anastasia_logo-6Pr6RUsI.png",t="/build/assets/email-aLIFGgIf.png",a="/build/assets/mobile-qKn_p69T.png",o="/build/assets/about01-i2T7zgA5.png",b="/build/assets/about02-VMH8UUmE.png",n="/build/assets/about03-61CgTDW2.png",i="/build/assets/about04-lKA-Sb0P.png",u={email:t,mobile:a,about01:o,about02:b,about03:n,about04:i,logo:s};export{u as i};

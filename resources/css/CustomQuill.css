@@ -1,0 +1,47 @@
+/* General Editor Styling */
+.quill-wrapper {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Editor Toolbar Styling */
+.custom-quill-editor .ql-toolbar {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ccc;
+}
+
+/* Editor Content Area Styling */
+.custom-quill-editor .ql-container {
+    height: 250px; /* Adjust height as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    background-color: #fff; /* Background color */
+    color: #333; /* Text color */
+}
+
+/* Editor Content Styling for Dark Mode */
+.custom-quill-editor .ql-container.ql-snow {
+    background-color: #1d2a39;
+    color: #e2e2e2;
+}
+
+/* Customize Quill Bubble Theme (if used) */
+.custom-quill-editor.ql-bubble .ql-editor {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+/* Example: Changing Button Colors in Toolbar */
+.custom-quill-editor .ql-toolbar button {
+    color: #555;
+}
+.custom-quill-editor .ql-toolbar button:hover {
+    color: #000;
+}
+
+/* Example: Customizing Selected Formats in Toolbar */
+.custom-quill-editor .ql-toolbar .ql-active {
+    background-color: #007bff;
+    color: #fff;
+}
