@@ -13,7 +13,7 @@
         "@vitejs/plugin-react": "^4.2.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.7.3",
-        "canvas": "^2.11.2",
+        "canvas": "^3.2.1",
         "i18next-scanner": "^4.4.0",
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.4.31",

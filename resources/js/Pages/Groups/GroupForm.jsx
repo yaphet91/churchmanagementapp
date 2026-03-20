@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
 import Modal from '@/Components/Modals/Modal';
 import TextInput from '@/Components/Forms/TextInput';
 import InputLabel from '@/Components/Forms/InputLabel';
@@ -16,6 +15,7 @@ import BirthdayEntry from '@/Components/Forms/BirthdayEntry';
 import Profile2 from '@/Components/Forms/SimpleImageUpload/Profile2';
 import '../../../css/CustomQuill.css';
 import { useSelector } from 'react-redux';
+import { toast } from 'sonner';
 
 const visibilityOptions = [
     { value: 'public', label: 'Public' },
@@ -61,12 +61,6 @@ const GroupForm = ({ isOpen, onClose, onGroupCreated }) => {
  
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('title', title);
-        console.log('description', description);
-        console.log('image', imageUrlData);
-        console.log('visibility', visibility);
-        // console.log('admins', admins);
-
         const editor = quillRef.current.getEditor();
         const plainText = editor.getText(); // Get plain text
 
@@ -78,9 +72,7 @@ const GroupForm = ({ isOpen, onClose, onGroupCreated }) => {
         };
 
         try {
-            const response = await axios.post('/groups/create', data);
-            console.log(response.data);
-            // alert('Group created successfully');
+            await axios.post('/admin/api/groups', data);
             toast.success('Group created successfully!');
 
             onGroupCreated()
@@ -89,14 +81,6 @@ const GroupForm = ({ isOpen, onClose, onGroupCreated }) => {
         catch (error) {
             console.log(error);
         }
-
-        // Inertia.post('/groups/create', data);
-    };
-
-
-    const handleAvatarUpdate = (newAvatar) => {
-        console.log('this is the new Avatar', newAvatar)
-        setImage(newAvatar);
     };
 
     if (!isOpen) return null;
@@ -130,7 +114,7 @@ const GroupForm = ({ isOpen, onClose, onGroupCreated }) => {
                 {/* Image upload */}
                 <div className='h-[230px] rounded-md w-full flex items-center mt-5 justify-center border border-dashed border-gray-400'>
 
-                    <Profile2 onAvatarUpdate={handleAvatarUpdate} />
+                    <Profile2 uploadUrl="/admin/api/upload-avatar" />
                 </div>
                 {/* Description text editor */}
                 <div className='w-full mt-6 h-[275px]'>

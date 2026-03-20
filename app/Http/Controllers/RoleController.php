@@ -9,19 +9,50 @@ use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
 {
+    public function index()
+    {
+        $roles = Role::query()
+            ->withCount(['users', 'permissions'])
+            ->orderBy('name')
+            ->get();
+
+        return response()->json($roles);
+    }
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
+        $name = $request->input('name', $request->input('title'));
+        $permissionNames = collect($request->input('permissions', []))
+            ->filter()
+            ->values()
+            ->all();
+
+        $validated = $request->merge([
+            'name' => $name,
+            'permissions' => $permissionNames,
+        ])->validate([
+            'name' => 'required|string|unique:roles,name',
+            'description' => 'nullable|string',
             'permissions' => 'array',
-            'permissions.*' => 'exists:permissions,name'
+            'permissions.*' => 'exists:permissions,name',
         ]);
 
-        $role = Role::create(['name' => $request->name]);
-        $permissions = Permission::whereIn('name', $request->permissions)->get();
-        $role->givePermissionTo($permissions);
+        $role = Role::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? $request->input('description'),
+        ]);
 
-        return response()->json(['message' => 'Role created and permissions assigned successfully.', 'role' => $role]);
+        if (!empty($validated['permissions'])) {
+            $permissions = Permission::whereIn('name', $validated['permissions'])->get();
+            if (method_exists($role, 'givePermissionTo')) {
+                $role->givePermissionTo($permissions);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Role created successfully.',
+            'role' => $role->loadCount(['users', 'permissions']),
+        ], 201);
     }
 
     public function edit(Role $role)
@@ -117,32 +148,4 @@ class RoleController extends Controller
     }
 
 
-
-}
-
-class UserRoleController extends Controller
-{
-    public function assignRole(Request $request)
-    {
-        $validatedData = $request->validate([
-            'role_name' => 'required|string|exists:roles,name',
-            'user_id' => 'required|integer|exists:users,id',
-        ]);
-
-        $user = User::find($validatedData['user_id']);
-        $user->assignRole($validatedData['role_name']);
-        return redirect()->back()->with('message', 'Role assigned successfully!');
-    }
-
-    public function revokeRole(Request $request)
-    {
-        $validatedData = $request->validate([
-            'role_name' => 'required|string|exists:roles,name',
-            'user_id' => 'required|integer|exists:users,id',
-        ]);
-
-        $user = User::find($validatedData['user_id']);
-        $user->removeRole($validatedData['role_name']);
-        return redirect()->back()->with('message', 'Role revoked successfully!');
-    }
 }

@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminEmailVerificationNotificationController;
 use App\Http\Controllers\Admin\AdminEmailVerificationPromptController;
 use App\Http\Controllers\Admin\AdminGoogleSocialiteController;
 use App\Http\Controllers\Admin\AdminVerifyEmailController;
 use App\Http\Controllers\Admin\RegisteredAdminController;
 use App\Http\Controllers\AdminApprovalController;
+use App\Http\Controllers\AvatarController;
 // use App\Http\Controllers\Admin\AdminEmailVerificationPromptController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -28,10 +30,8 @@ use Inertia\Inertia;
 
 
 
-Route::middleware(['auth:admin', 'role:super-admin'])->group(function () {
-    Route::get('/admin/approval/{admin}', [AdminApprovalController::class, 'show'])->name('admin.approval.show');
-    Route::post('/admin/approval/{admin}', [AdminApprovalController::class, 'approve'])->name('admin.approval.approve');
-});
+Route::get('/admin/approval/{admin}', [AdminApprovalController::class, 'show'])->name('admin.approval.show');
+Route::post('/admin/approval/{admin}', [AdminApprovalController::class, 'approve'])->name('admin.approval.approve');
 
 
 
@@ -75,9 +75,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Route to admin dashboard page
 // Route::middleware(['auth:admin', 'admin.approved'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Dashboards/Admin/AdminDashboard');
-    })->name('admin.dashboard');
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 
     Route::get('/admin/profile', function () {
         return Inertia::render('Admin/Profile/AdminProfilePage');
@@ -92,9 +90,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('people.children');
 
 
-    Route::get('/admin/messages', function () {
-        return Inertia::render('Messages/AdminMessages');
-    })->name('admin.messages');
+    Route::get('/admin/messages', [AdminDashboardController::class, 'messages'])->name('admin.messages');
 
     Route::get('/admin/groups', function () {
         return Inertia::render('Groups/AdminGroups');
@@ -124,14 +120,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
         return Inertia::render('Events/EventsAdmin');
     })->name('event.page.admin');
 
-    Route::get('/groups', [GroupController::class, 'index']);
+    Route::prefix('/admin/api')->group(function () {
+        Route::get('/dashboard-summary', [AdminDashboardController::class, 'dashboardSummaryApi']);
+        Route::get('/messages', [AdminDashboardController::class, 'messagesApi']);
+        Route::get('/groups', [GroupController::class, 'index']);
+        Route::post('/groups', [GroupController::class, 'create']);
+        Route::get('/roles', [RoleController::class, 'index']);
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/events', [EventController::class, 'index']);
+        Route::post('/events', [EventController::class, 'store']);
+        Route::post('/upload-avatar', [AvatarController::class, 'uploadImageToSpaces']);
+    });
+
     Route::get('/groups/{group}', [GroupController::class, 'show'])->name('groups.show');
 
-    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
     Route::post('/assign-role', [UserRoleController::class, 'assignRole'])->name('users.assignRole');
     Route::post('/revoke-role', [UserRoleController::class, 'revokeRole'])->name('users.revokeRole');
-
-    Route::post('/events/create', [EventController::class, 'store']);
 
     // update membership
     Route::put('/admin/update-membership/{id}', [MembershipController::class, 'update'])->name('admin.update.membership');
@@ -140,7 +144,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 
     // ========================================= GROUPS =========================================
-    Route::post('/groups/create', [GroupController::class, 'create']);
     // Route::post('/groups/{group}/members', [GroupController::class, 'addMember']);
     Route::get('/groups/{group}/members', [GroupController::class, 'listMembers']);
     Route::post('/groups/{group}/addMembers', [GroupController::class, 'addMember'])->name('groups.addMembers');

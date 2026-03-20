@@ -7,7 +7,7 @@ import ImageTemp from '@/assets/images/logos/anastasia_logo.png';
 import { useDispatch, useSelector } from "react-redux";
 import { addEventImage } from "@/features/event/eventSlice";
 
-const Profile2 = ({ isChild }) => {
+const Profile2 = ({ isChild, uploadUrl = '/upload-avatar' }) => {
     const [loadSpinner, setLoadSpinner] = useState(false);
     const [avatar, setAvatar] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,7 +32,7 @@ const Profile2 = ({ isChild }) => {
             const formData = new FormData();
             formData.append('image', avatar.file);
 
-            axios.post('/upload-avatar', formData, {
+            axios.post(uploadUrl, formData, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json',

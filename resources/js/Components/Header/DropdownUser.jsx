@@ -19,8 +19,10 @@ const DropdownUser = () => {
     
     const { imageUrl } = useSelector((store) => store.profileImage.value)
     const dispatch = useDispatch();
-    const { url } = usePage();
+    const { url, props } = usePage();
     const isAdminPath = url.includes('/admin');
+    const adminName = admin.name || props.admin?.name || 'Local Admin';
+    const userName = user.name || props.auth?.user?.name || 'Guest User';
 
     const toggleDrawer = () => {
         dispatch(setDrawerOpen());
@@ -43,7 +45,7 @@ const DropdownUser = () => {
                         >
                     {/* {user.name} */}
                     
-                            {isAdminPath ? admin.name : user.name}
+                            {isAdminPath ? adminName : userName}
 
                             <svg
                                 className="ms-2 -me-0.5 h-4 w-4 group-hover:rotate-180"
@@ -78,5 +80,4 @@ const DropdownUser = () => {
 };
 
 export default DropdownUser;
-
 

@@ -203,7 +203,6 @@ const PeopleTable = () => {
         {
             accessorKey: 'profession',
             header: 'Profession',
-            accessorKey: 'profession',
             cell: info => info.getValue(),
             filterFn: 'includesStringSensitive', //note: normal non-fuzzy filter column
         },

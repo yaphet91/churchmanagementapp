@@ -48,25 +48,31 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        Log::info('Storing new event.', $request->all());
-
         try {
-            // Retrieve the current tenant
-            $tenant = app('tenant');
+            $data = $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'image_url' => 'nullable|string',
+                'date' => 'nullable|string',
+                'start_time' => 'nullable|string',
+                'end_time' => 'nullable|string',
+                'selected_groups' => 'array',
+                'selected_groups.*' => 'integer',
+                'attendees_type' => 'nullable|string|max:255',
+                'visibility' => 'nullable|string|max:255',
+                'location' => 'nullable|string|max:255',
+                'repeat' => 'nullable|string|max:255',
+                'manager' => 'nullable|string|max:255',
+                'day_of_the_week' => 'nullable|string|max:255',
+                'day_of_the_month' => 'nullable|string|max:255',
+                'date_of_the_year' => 'nullable|string|max:255',
+            ]);
 
-            // Merge tenant_id into the request data
-            $data = $request->all();
-            // $data['tenant_id'] = $tenant->id;
-
-            // Create the event with the tenant_id included
             $event = Event::create($data);
 
-            if ($request->has('selected_groups')) {
-                $event->groups()->attach($request->selected_groups);
-                Log::info('Attached groups to event.', ['groups' => $request->selected_groups]);
+            if (!empty($data['selected_groups'])) {
+                $event->groups()->sync($data['selected_groups']);
             }
-
-            Log::info('Event created successfully.', ['event_id' => $event->id]);
 
             return response()->json(['message' => 'Event created successfully', 'event' => $event]);
         } catch (\Exception $e) {

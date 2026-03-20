@@ -35,9 +35,9 @@ const EventsAdmin = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('/events');
+      const response = await axios.get('/admin/api/events');
       setEvents(response.data);
-      setFilteredEvents(response.data.reverse());
+      setFilteredEvents([...response.data].reverse());
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -63,7 +63,7 @@ const EventsAdmin = () => {
         return eventStart >= startDate && eventEnd <= endDate;
       });
     }
-    setFilteredEvents(filtered.reverse());
+    setFilteredEvents([...filtered].reverse());
   };
 
   return (
@@ -107,10 +107,10 @@ const EventsAdmin = () => {
           <div className='mt-10 grid grid-cols-1 md:grid-cols-2 gap-4'>
             {filteredEvents.map((event) => (
               <div key={event.id} onClick={() => handleEventClick(event)}
-                className='h-[130px] w-[530px] flex items-start justify-start space-x-6 bg-gray-700 cursor-pointer'>
+                className='flex min-h-[130px] w-full items-start justify-start space-x-6 rounded-lg bg-gray-700 cursor-pointer'>
                 <div className='w-[10px] h-full bg-green-600'></div>
                 <div className='flex items-center p-4 justify-start space-x-6'>
-                  <img src={event.image_url} alt="Event" className='rounded-md h-[90px] w-[120px]' />
+                  <img src={event.image_url} alt="Event" className='rounded-md h-[90px] w-[120px] object-cover' />
                   <div className='flex flex-col items-start justify-start'>
                     <h1 className='text-xl capitalize'>{`${event.title}`}</h1>
                     <Tooltip2 className='italic' text={event.description? event.description: ''} maxLength={80} />

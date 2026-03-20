@@ -190,7 +190,6 @@ const GroupMembersTable = ({ membersList }) => {
         {
             accessorKey: 'email',
             header: 'Email',
-            accessorKey: 'email',
             cell: info => info.getValue(),
             filterFn: 'includesStringSensitive', //note: normal non-fuzzy filter column
         },

@@ -31,16 +31,6 @@ const visibilityOptions = [
     { value: 'groups', label: 'Groups' },
 ]
 
-const listOfGroups = [
-    { id: 1, value: 'Group 1', text: 'Group 1', selected: false },
-    { id: 2, value: 'Group 2', text: 'Group 2', selected: false },
-    { id: 3, value: 'Group 3', text: 'Group 3', selected: false },
-    { id: 4, value: 'Group 4', text: 'Group 4', selected: false },
-    { id: 5, value: 'Group 5', text: 'Group 5', selected: false },
-    { id: 6, value: 'Group 6', text: 'Group 6', selected: false },
-    { id: 7, value: 'Group 7', text: 'Group 7', selected: false },
-];
-
 const repeatOptions = [
     { value: 'daily', label: 'Daily' },
     { value: 'weekly', label: 'Weekly' },
@@ -88,7 +78,7 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
 
     const [groupIds, setGroupIds] = useState([]);
     const [attendeesType, setAttendeesType] = useState('');
-    const [selectedGroups, setSelectedGroups] = useState(listOfGroups.filter(option => option.selectedGroups).map(option => option.value));
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
     const [dayOfTheWeek, setDayOfTheWeek] = useState('');
     const [dayOfTheMonth, setDayOfTheMonth] = useState('');
@@ -110,8 +100,11 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
   
     const fetchGroups = async () => {
         try {
-            const response = await axios.get('/groups');
-            setGroupOptions(response.data);
+            const response = await axios.get('/admin/api/groups');
+            setGroupOptions(response.data.map((group) => ({
+                id: group.id,
+                title: group.title,
+            })));
         } catch (error) {
             console.error('Error fetching groups:', error);
         }
@@ -132,9 +125,9 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
             title,
             description: plainText,
             image_url: imageUrlData,
-            // date,
-            // start_time: startTime,
-            // end_time: endTime,
+            date,
+            start_time: startTime,
+            end_time: endTime,
             selected_groups: selectedGroups,
             attendees_type: attendeesType,
             visibility,
@@ -148,9 +141,7 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
 
         // Inertia.post('/events/create', data);
         try {
-            console.log('data', data); 
-            const response = await axios.post('/events/create', data);
-            console.log(response.data);
+            await axios.post('/admin/api/events', data);
             alert('Event created successfully');
             onEventCreated();
             onClose();
@@ -161,16 +152,9 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
     };
 
     const handleGroupSelection = (value) => {
-        const selectedGroupIds = value.map((group) => group.value);
-        setGroupIds(selectedGroupIds);
-        // console.log('value', value);
+        setGroupIds(value);
+        setSelectedGroups(value);
     }
-
-    const handleAvatarUpdate = (newAvatar) => {
-        console.log('this is the new Avatar', newAvatar)
-        setImage(newAvatar);
-    };
-
 
     return (
         <Modal show={isOpen} onClose={onClose} maxWidth='4xl' maxHeight='200px'>
@@ -235,7 +219,7 @@ const EventForm = ({ isOpen, onClose, onEventCreated }) => {
                 {/* Image upload */}
                 <div className='h-[230px] rounded-md w-full flex items-center mt-5 justify-center border border-dashed border-gray-400'>
 
-                    <Profile2 onAvatarUpdate={handleAvatarUpdate} />
+                    <Profile2 uploadUrl="/admin/api/upload-avatar" />
                 </div>
                 {/* Description text editor */}
                 <div className='w-full mt-6 h-[275px]'>

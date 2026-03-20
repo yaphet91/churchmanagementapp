@@ -7,7 +7,7 @@ import GroupsTable from '@/Components/Tables/GroupsTable/GroupsTable';
 const AdminGroups = () => {
   const [isGroupFormModalOpen, setIsGroupFormModalOpen] = React.useState(false);
   const theme = useSelector((store) => store.theme.theme);
-  const [groups, setGroups] = useState({});
+  const [groups, setGroups] = useState([]);
 
   const handleAddGroup = () => {
     setIsGroupFormModalOpen(true);
@@ -19,9 +19,8 @@ const AdminGroups = () => {
 
   const fetchGroups = async () => {
     try {
-      const response = await axios.get('/admin/groups');
-      console.log('response', response);
-      // setGroups(response.data);
+      const response = await axios.get('/admin/api/groups');
+      setGroups(response.data);
     } catch (error) {
       console.error('Error fetching groups:', error);
     }

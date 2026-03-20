@@ -1,1 +1,0 @@
-import{e as r,j as o}from"./app-6jdrUxIc.js";function m({value:e,className:t="",children:a,...n}){const s=r(l=>l.language.language);return o.jsx("label",{...n,className:`block font-medium ${s==="en"?"text-sm":"text-md"} text-gray-600 dark:text-blue-400`+t,children:e||a})}export{m as I};
