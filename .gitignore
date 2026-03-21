@@ -1,2 +1,7 @@
 /ngrok
 node_modules
+.env
+.env.example
+/vendor
+/docker-compose.yml
+stripe

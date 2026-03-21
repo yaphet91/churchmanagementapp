@@ -35,3 +35,4 @@ Frontend:
 - TailwindCSS
 - Inertia.js
 
+if ssr needed add  && vite build --ssr", to the package.json and ssr:'resources/js/ssr.jsx' server : { host, port} for local dev cofig to the .env

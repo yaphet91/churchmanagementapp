@@ -7,7 +7,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: 'resources/js/app.jsx',
-            ssr: 'resources/js/ssr.jsx',
+            //ssr: 'resources/js/ssr.jsx',
             refresh: true,
         }),
         react(),
@@ -17,8 +17,8 @@ export default defineConfig({
             '@': path.resolve(__dirname, './resources/js') // Adjust this path to match your project structure
         },
     },
-    server: {
-        host: 'localhost',
-        port: 5173,
-    }
+   // server: {
+   //     host: 'localhost',
+   //     port: 5173,
+   // }
 });
