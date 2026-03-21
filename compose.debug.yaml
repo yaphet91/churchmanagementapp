@@ -1,0 +1,6 @@
+services:
+  churchmanagementsaas:
+    image: churchmanagementsaas
+    build:
+      context: .
+      dockerfile: ./Dockerfile

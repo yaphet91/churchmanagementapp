@@ -1,1 +1,0 @@
-const n=(t,e)=>{const a={y:t==="up"?40:t==="down"?-40:0,x:t==="left"?40:t==="right"?-40:0};return t==="center"?{hidden:{opacity:0},show:{opacity:1,transition:{type:"tween",duration:1.2,delay:e,ease:[.25,.25,.25,.75]}}}:{hidden:{...a,opacity:0},show:{y:0,x:0,opacity:1,transition:{type:"tween",duration:1.2,delay:e,ease:[.25,.25,.25,.75]}}}};export{n as f};

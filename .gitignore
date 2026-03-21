@@ -1,7 +1,11 @@
 /ngrok
-node_modules
-.env
-.env.example
+/.env
+/.env.example
 /vendor
 /docker-compose.yml
 stripe
+/node_modules
+/public/build
+/bootstrap/ssr
+/storage/framework/views
+/storage/logs
