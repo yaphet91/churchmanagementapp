@@ -5,7 +5,7 @@
 /docker-compose.yml
 stripe
 /node_modules
-/public/build
+/public/build 
 /bootstrap/ssr
 /storage/framework/views
-/storage/logs
+/storage/log
