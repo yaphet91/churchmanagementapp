@@ -3,7 +3,7 @@
 /public/build 
 /bootstrap/ssr
 /storage/framework/views
-/storage/log
+/storage/logs
 /vendor
 ngrok
 .env
